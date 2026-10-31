@@ -425,13 +425,23 @@ npm run demo    # la demo en http://localhost:8080
 | `selector-nocturno.d.ts` | Los tipos para TypeScript. |
 | `index.html` | La demo, publicada en GitHub Pages. |
 | `test/` | Las pruebas y un servidor mínimo para la demo. |
+| `.github/workflows/pages.yml` | Prueba y publica la demo con cada cambio en `main`. |
 | `docs/` | Las imágenes de este README. |
 
 ### La demo en GitHub Pages
 
-La demo es `index.html`, en la raíz del repositorio, y se publica desde la rama `main`
-(Settings → Pages → *Deploy from a branch* → `main` / `(root)`). Cada push a `main` la
-actualiza en <https://carlos-illobre.github.io/selector-nocturno/>.
+La demo es `index.html`, en la raíz del repositorio. La publica el flujo
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) con cada push a `main`:
+
+1. corre las 12 pruebas en Chromium;
+2. si pasan, publica `index.html` y `selector-nocturno.js` en
+   <https://carlos-illobre.github.io/selector-nocturno/>.
+
+Si una prueba falla, la demo no se actualiza y queda la versión anterior. También se puede
+publicar a mano desde la pestaña **Actions** → *Demo en GitHub Pages* → **Run workflow**.
+
+Para que funcione, Pages tiene que estar configurado con **Settings → Pages → Source:
+GitHub Actions**.
 
 ## Licencia
 

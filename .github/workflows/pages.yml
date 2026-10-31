@@ -1,0 +1,52 @@
+# Publica la demo en GitHub Pages con cada cambio en main, solo si las pruebas pasan.
+# Requiere: Settings → Pages → Source: «GitHub Actions».
+name: Demo en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # para publicar a mano desde la pestaña Actions
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Una publicación por vez; si llega un cambio nuevo, la que espera se reemplaza.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  pruebas:
+    name: Pruebas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+
+  publicar:
+    name: Publicar la demo
+    needs: pruebas
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicacion.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Armar el sitio (solo lo que usa la demo)
+        run: |
+          mkdir _site
+          cp index.html selector-nocturno.js _site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: publicacion
+        uses: actions/deploy-pages@v4
