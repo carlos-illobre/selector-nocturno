@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selector nocturno</title>
+<meta name="description" content="Selector de modo día / noche con animación, como componente web sin dependencias.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=JetBrains+Mono&display=swap">
+<script>
+  // Antes de pintar: tema guardado, o el del sistema. Así no hay destello de color equivocado.
+  try {
+    const guardado = localStorage.getItem('tema');
+    const oscuro = guardado ? guardado === 'oscuro' : matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.classList.toggle('oscuro', oscuro);
+  } catch { /* sin almacenamiento: queda el tema claro */ }
+</script>
+<style>
+  :root {
+    --fondo: #dfe5ee; --superficie: #e9eef5; --tinta: #232b3b; --tenue: #56627a; --borde: #c9d2df;
+    --codigo: #f4f7fb; --acento: #b77c0c;
+    --letra: "Nunito", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    color-scheme: light;
+  }
+  :root.oscuro {
+    --fondo: #1b2233; --superficie: #222b3f; --tinta: #e3e8f0; --tenue: #9fabbf; --borde: #34405a;
+    --codigo: #171e2d; --acento: #f7b52c;
+    color-scheme: dark;
+    /* El borde del selector, sobre fondo oscuro: menos luz, más sombra */
+    --sn-borde-luz: rgba(255, 255, 255, .1);
+    --sn-borde-sombra: rgba(0, 0, 0, .5);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--fondo); color: var(--tinta);
+    font: 16px/1.55 var(--letra);
+    transition: background-color .7s, color .7s;
+  }
+  @media (prefers-reduced-motion: reduce) { body { transition: none; } }
+  .pagina { max-width: 780px; margin: 0 auto; padding: 40px 16px 64px; display: grid; gap: 48px; }
+  h1 { margin: 0; font-size: clamp(2rem, 6vw, 2.8rem); font-weight: 800; line-height: 1.1; text-wrap: balance; }
+  h2 { margin: 0; font-size: 1.3rem; font-weight: 800; }
+  p { margin: 0; color: var(--tenue); max-width: 62ch; }
+  a { color: var(--acento); font-weight: 700; }
+  code { font-family: var(--mono); font-size: .88em; }
+  pre {
+    margin: 0; overflow-x: auto; background: var(--codigo); border: 1px solid var(--borde);
+    border-radius: 14px; padding: 16px 18px; font: 13.5px/1.65 var(--mono); color: var(--tinta);
+  }
+  section { display: grid; gap: 16px; min-width: 0; }
+
+  .portada { display: grid; justify-items: center; text-align: center; gap: 22px; padding-top: 16px; }
+  .portada p { margin-inline: auto; }
+  .portada selector-nocturno { font-size: clamp(14px, 5vw, 26px); margin-block: 12px; }
+  .estado { font-weight: 800; letter-spacing: .03em; color: var(--tinta); }
+  .enlaces { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+
+  .grilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+  .muestra {
+    display: grid; justify-items: center; align-content: center; gap: 10px;
+    padding: 26px 12px; border-radius: 18px; background: var(--superficie); text-align: center;
+  }
+  .muestra small { color: var(--tenue); font-size: .85rem; }
+
+  /* Ejemplo de personalización: un atardecer */
+  .atardecer {
+    --sn-cielo-dia: #e0785a;
+    --sn-cielo-noche: #3b2350;
+    --sn-sol: #ffd25e;
+    --sn-nube-fondo: #f2b49b;
+    --sn-nube-frente: #fde4d6;
+    --sn-duracion: 1s;
+  }
+  footer { color: var(--tenue); font-size: .9rem; text-align: center; }
+</style>
+</head>
+<body>
+<main class="pagina">
+  <header class="portada">
+    <h1>Selector nocturno</h1>
+    <p>Un selector de modo día / noche con animación, hecho como componente web. No depende de nada:
+      funciona en HTML puro, React, Vue, Angular, Svelte o lo que uses.</p>
+    <selector-nocturno id="tema" label="Tema oscuro"></selector-nocturno>
+    <span class="estado" id="estado" aria-live="polite">Modo día</span>
+    <p>Tocalo: esta página cambia de tema con él y lo recuerda la próxima vez.</p>
+    <nav class="enlaces">
+      <a href="https://github.com/carlos-illobre/selector-nocturno">Código en GitHub</a>
+      <a href="https://github.com/carlos-illobre/selector-nocturno#readme">Cómo instalarlo</a>
+    </nav>
+  </header>
+
+  <section>
+    <h2>Variantes</h2>
+    <div class="grilla">
+      <div class="muestra"><selector-nocturno style="font-size:9px" label="Ejemplo chico"></selector-nocturno><small>Chico: <code>font-size: 9px</code></small></div>
+      <div class="muestra"><selector-nocturno style="font-size:12px" noche label="Ejemplo que arranca de noche"></selector-nocturno><small>Arranca de noche: <code>noche</code></small></div>
+      <div class="muestra"><selector-nocturno style="font-size:12px" disabled label="Ejemplo deshabilitado"></selector-nocturno><small>Deshabilitado: <code>disabled</code></small></div>
+      <div class="muestra"><selector-nocturno class="atardecer" style="font-size:12px" label="Ejemplo con colores propios"></selector-nocturno><small>Colores propios: variables <code>--sn-*</code></small></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Usarlo</h2>
+    <pre><code>&lt;script type="module"
+  src="https://cdn.jsdelivr.net/gh/carlos-illobre/selector-nocturno@main/selector-nocturno.js"&gt;&lt;/script&gt;
+
+&lt;selector-nocturno&gt;&lt;/selector-nocturno&gt;
+
+&lt;script type="module"&gt;
+  document.querySelector('selector-nocturno').addEventListener('change', (e) =&gt; {
+    document.documentElement.classList.toggle('oscuro', e.detail.noche);
+  });
+&lt;/script&gt;</code></pre>
+    <p>Todas las opciones, la instalación con npm y ejemplos para cada framework están en el
+      <a href="https://github.com/carlos-illobre/selector-nocturno#readme">README</a>.</p>
+  </section>
+
+  <footer>Selector nocturno · componente web sin dependencias</footer>
+</main>
+
+<script type="module" src="./selector-nocturno.js"></script>
+<script type="module">
+  const selector = document.getElementById('tema');
+  const estado = document.getElementById('estado');
+  const mostrar = (noche) => { estado.textContent = noche ? 'Modo noche' : 'Modo día'; };
+
+  selector.noche = document.documentElement.classList.contains('oscuro');
+  mostrar(selector.noche);
+
+  selector.addEventListener('change', (e) => {
+    document.documentElement.classList.toggle('oscuro', e.detail.noche);
+    mostrar(e.detail.noche);
+    try { localStorage.setItem('tema', e.detail.noche ? 'oscuro' : 'claro'); } catch { /* sin almacenamiento */ }
+  });
+</script>
+</body>
+</html>
