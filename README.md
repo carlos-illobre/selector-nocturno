@@ -41,11 +41,11 @@ Elegí una de las tres formas.
 
 ```html
 <script type="module"
-  src="https://cdn.jsdelivr.net/gh/carlos-illobre/selector-nocturno@v1.0.0/selector-nocturno.js"></script>
+  src="https://cdn.jsdelivr.net/gh/carlos-illobre/selector-nocturno@main/selector-nocturno.js"></script>
 ```
 
-`@v1.0.0` fija la versión: tu página no cambia sola cuando salga una nueva. Para usar siempre la
-última, cambialo por `@main`.
+`@main` trae siempre la última versión. Para que tu página no cambie sola cuando salga una
+nueva, fijala con el código de un commit en lugar de `main`, por ejemplo `@395116f`.
 
 ### 2. Con npm, pnpm o yarn
 
