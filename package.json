@@ -2,6 +2,7 @@
   "name": "selector-nocturno",
   "version": "1.0.0",
   "description": "Selector de modo día / noche con animación, como componente web sin dependencias.",
+  "license": "0BSD",
   "type": "module",
   "main": "./selector-nocturno.js",
   "module": "./selector-nocturno.js",
@@ -14,7 +15,8 @@
   },
   "files": [
     "selector-nocturno.js",
-    "selector-nocturno.d.ts"
+    "selector-nocturno.d.ts",
+    "LICENSE"
   ],
   "sideEffects": true,
   "scripts": {

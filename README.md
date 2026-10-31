@@ -17,6 +17,7 @@ React, Vue, Angular, Svelte, Astro o cualquier proyecto web.
 - **Personalizable:** el tamaño se cambia con `font-size`; los colores, el borde y la
   duración, con variables CSS.
 - **Funciona en formularios:** con `name`, se envía igual que una casilla de verificación.
+- **Libre:** licencia 0BSD; usalo, copialo y cambialo para lo que quieras, sin pedir permiso ni citar a nadie.
 - **Liviano:** un archivo de unos 11 KB sin comprimir, sin imágenes ni dependencias.
 
 ## Índice
@@ -32,6 +33,7 @@ React, Vue, Angular, Svelte, Astro o cualquier proyecto web.
 - [Navegadores compatibles](#navegadores-compatibles)
 - [Cómo está hecho](#cómo-está-hecho)
 - [Desarrollo](#desarrollo)
+- [Licencia](#licencia)
 
 ## Instalación
 
@@ -430,3 +432,9 @@ npm run demo    # la demo en http://localhost:8080
 La demo es `index.html`, en la raíz del repositorio, y se publica desde la rama `main`
 (Settings → Pages → *Deploy from a branch* → `main` / `(root)`). Cada push a `main` la
 actualiza en <https://carlos-illobre.github.io/selector-nocturno/>.
+
+## Licencia
+
+[0BSD](LICENSE) (BSD Zero Clause). Podés usarlo, copiarlo, modificarlo y distribuirlo, gratis o
+cobrando, en proyectos abiertos o cerrados, **sin ninguna condición**: no hace falta citar al
+autor ni incluir el aviso de la licencia. Se entrega tal cual, sin garantías.
