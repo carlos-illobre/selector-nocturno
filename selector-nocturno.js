@@ -80,10 +80,8 @@ const ESTILOS = /* css */ `
     isolation: isolate;
   }
   :host([noche]) button { --pos: var(--recorrido); --noche: 1; }
-  @media (hover: hover) {
-    button:hover { --empuje: .35em; }
-    :host([noche]) button:hover { --empuje: -.35em; }
-  }
+  /* Al pasar el mouse, la perilla amaga hacia donde va a ir: a la derecha de día, a la izquierda de noche */
+  @media (hover: hover) { button:hover { --empuje: calc(.35em - var(--noche) * .7em); } }
   /* Sin animación al cargar (no «salta» si arranca de noche) ni si el sistema pide menos movimiento */
   :host(:not([data-listo])) button { --t: 0s; }
   @media (prefers-reduced-motion: reduce) { button { --t: 1ms; } }
@@ -108,7 +106,7 @@ const ESTILOS = /* css */ `
   }
   .cielo, .cielo::before, .cielo::after, .estrellas, .nubes { position: absolute; inset: 0; }
   .cielo::before, .cielo::after { content: ""; }
-  .halos i, .estrellas i, .nube, .perilla, .luna, .luna i { position: absolute; border-radius: 50%; }
+  .estrellas i, .nube, .perilla, .luna, .luna i { position: absolute; border-radius: 50%; }
 
   .cielo {
     border-radius: inherit;
@@ -133,18 +131,20 @@ const ESTILOS = /* css */ `
     pointer-events: none;
   }
 
-  /* Anillos de luz: acompañan a la perilla */
+  /* Anillos de luz: tres círculos superpuestos en un solo elemento; acompañan a la perilla */
   .halos {
+    --anillo: rgba(255, 255, 255, .09);
     position: absolute;
     top: 50%;
     left: calc(var(--margen) + var(--perilla) / 2);
-    transform: translateX(calc(var(--pos) + var(--empuje)));
-  }
-  .halos i {
-    width: var(--d);
-    height: var(--d);
-    background: rgba(255, 255, 255, .09);
+    width: 9.4em;
+    height: 9.4em;
     translate: -50% -50%;
+    background:
+      radial-gradient(circle, var(--anillo) 2.6em, transparent 2.62em),
+      radial-gradient(circle, var(--anillo) 3.6em, transparent 3.62em),
+      radial-gradient(circle, var(--anillo) 4.68em, transparent 4.7em);
+    transform: translateX(calc(var(--pos) + var(--empuje)));
   }
 
   .estrellas {
@@ -228,7 +228,6 @@ const ESTILOS = /* css */ `
 `;
 
 /* El dibujo, como datos (medidas en em). Para mover una estrella o un cráter se cambia acá. */
-const HALOS = [5.2, 7.2, 9.4];                        // diámetros
 const ESTRELLAS = [                                   // [x, y, brillo?, escala?]
   [1.4, 1.2], [2.3, 2.9], [3.6, 1.9], [4.4, 3.3], [1.1, 3.1], [5.3, .9],
   [2.6, .9, true], [4.9, 2.3, true], [1.6, 2.2, true, .7],
@@ -238,7 +237,7 @@ const CRATERES = [[.55, 1.15, 1.1], [1.55, .45, .7], [2.05, 1.75, .75]];  // [x,
 const MARCADO = `
   <button type="button" role="switch" part="boton">
     <span class="cielo">
-      <span class="halos">${HALOS.map((d) => `<i style="--d:${d}em"></i>`).join('')}</span>
+      <span class="halos"></span>
       <span class="estrellas">${ESTRELLAS.map(([x, y, brillo, s = 1]) =>
         `<i ${brillo ? 'class="brillo" ' : ''}style="--x:${x}em;--y:${y}em;--s:${s}"></i>`).join('')}</span>
       <span class="nubes"><span class="nube fondo"></span><span class="nube frente"></span></span>

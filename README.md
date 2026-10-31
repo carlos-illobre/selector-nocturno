@@ -392,9 +392,9 @@ Las pruebas automáticas corren en Chromium. En Firefox y Safari no hay pruebas 
 
 Todo el componente está en [`selector-nocturno.js`](selector-nocturno.js):
 
-- **El dibujo son datos.** Las posiciones de las estrellas, los cráteres y los anillos de luz
-  están en tres listas al principio del archivo (`ESTRELLAS`, `CRATERES`, `HALOS`). Para mover
-  una estrella se cambia un número, no el CSS.
+- **El dibujo son datos.** Las posiciones de las estrellas y los cráteres están en dos listas
+  al principio del archivo (`ESTRELLAS` y `CRATERES`). Para mover una estrella se cambia un
+  número, no el CSS. Los tres anillos de luz son un solo elemento con tres degradés circulares.
 - **El estado son tres variables CSS.** `--pos` (dónde está la perilla), `--noche` (0 de día,
   1 de noche) y `--empuje` (el amago al pasar el mouse). La noche y el mouse solo cambian esas
   variables; cada pieza calcula su posición y su opacidad a partir de ellas.
